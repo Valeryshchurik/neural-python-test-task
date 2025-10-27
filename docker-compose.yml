@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: my_app_container
+    volumes:
+      - ./src:/src
+    ports:
+      - "8000:8000"
+    command: ["python", "main.py"]
+    env_file:
+      - .env
