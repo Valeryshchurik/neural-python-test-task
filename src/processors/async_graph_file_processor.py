@@ -1,15 +1,10 @@
 from pathlib import Path
-
 import aiofiles
-
 from langgraph.constants import START, END
 from langgraph.graph import StateGraph
 from pydantic import BaseModel, Field
-
 from processors.base_llm_file_processor import BaseLlmFileProcessor
-
 from enum import Enum
-
 from utils import prepare_traceback_text
 
 
@@ -40,28 +35,28 @@ class AsyncGraphFileProcessor(BaseLlmFileProcessor):
     def _build_graph(self):
         graph_builder = StateGraph(FileProcessingState)
 
-        def extract_license(state: FileProcessingState) -> FileProcessingState:
-            result = self.copyright_license_chain.invoke({"file_data": state.file_data})
+        async def extract_license(state: FileProcessingState) -> FileProcessingState:
+            result = await self.copyright_license_chain.ainvoke({"file_data": state.file_data})
             state.copyright_info = result.dict()
             errors = state.copyright_info.pop('errors')
             state.is_license_open_source = result.is_license_open_source
             state.errors.extend(errors)
             return state
 
-        def count_functions(state: FileProcessingState) -> FileProcessingState:
-            result = self.function_counter_chain.invoke({"file_data": state.file_data})
+        async def count_functions(state: FileProcessingState) -> FileProcessingState:
+            result = await self.function_counter_chain.ainvoke({"file_data": state.file_data})
             state.total_func_num = result.total_func_num
             state.errors.extend(result.errors)
             return state
 
-        def extract_functions(state: FileProcessingState) -> FileProcessingState:
-            result = self.function_extractor_chain.invoke({"file_data": state.file_data})
+        async def extract_functions(state: FileProcessingState) -> FileProcessingState:
+            result = await self.function_extractor_chain.ainvoke({"file_data": state.file_data})
             state.functions_list = result.functions_list
             state.errors.extend(result.errors)
             return state
 
-        def rust_translate(state: FileProcessingState) -> FileProcessingState:
-            result = self.rust_translator_chain.invoke({"file_data": state.file_data})
+        async def rust_translate(state: FileProcessingState) -> FileProcessingState:
+            result = await self.rust_translator_chain.ainvoke({"file_data": state.file_data})
             state.rust_code = result.code
             state.errors.extend(result.errors)
             return state
