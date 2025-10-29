@@ -1,26 +1,32 @@
+from pathlib import Path
+
 from langchain_core.runnables import RunnableLambda
 from langchain_core.runnables.branch import RunnableBranch
 from pydantic import BaseModel
 
-from src.parsers import (
+from settings import OUTPUT_FOLDER, RUST_FOLDER
+from parsers import (
     license_info_parser,
     function_extractor_parser,
     function_counter_parser,
     rust_translator_parser,
     RustCodeLlmOutput,
 )
-from src.prompts import (
+from prompts import (
     copyright_license_template,
     function_extractor_template,
     function_counter_template,
     rust_translator_template,
 )
+from utils import get_unique_filepath
 
 
 class LlmPyFuncFileProcessor:
-    def __init__(self, llm, base_path):
+    def __init__(self, llm):
+        OUTPUT_FOLDER.mkdir(exist_ok=True)
+        RUST_FOLDER.mkdir(exist_ok=True)
+
         self.llm = llm
-        self.base_path = base_path
         self.file_data = None
         self.file_context_keeper = RunnableLambda(
             lambda inputs: {
@@ -53,17 +59,22 @@ class LlmPyFuncFileProcessor:
 
         return copyright_license_chain | license_branch
 
-    def process_file(self, file_path: str):
-        with open(file_path, "r", encoding="utf-8") as f:
-            file_content = f.read()
+    def process_file(self, input_path: Path) -> bool:
+        try:
+            print(f'Parsing: {input_path}')
+            file_content = input_path.read_text(encoding="utf-8")
             self.file_data = file_content
             result = self.entry_point.invoke({})
 
-        if isinstance(result, RustCodeLlmOutput):
-            filename = "rust/out.rs"
-            with open("rust/out.rs", "w", encoding="utf-8") as f:
-                f.write(result.code)
-                print(f'File {filename} generated')
+            if isinstance(result, RustCodeLlmOutput):
+                output_file = get_unique_filepath(RUST_FOLDER / f"{input_path.stem}.rs")
+                output_file.write_text(result.code, encoding="utf-8")
+            else:
+                output_file = get_unique_filepath(OUTPUT_FOLDER / f"{input_path.stem}.txt")
+                output_file.write_text(str(result), encoding="utf-8")
+        except Exception as e:
+            print(f'An error occurred while processing file: {input_path}')  # should be logger.error actually
+            print(e)
+            return False
 
-        return result
-
+        return True

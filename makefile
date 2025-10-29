@@ -1,8 +1,15 @@
-lock:
-	docker run --rm -v $pwd:/src -w /src python:3.12 /bin/sh -c "\
-		curl -sSL https://install.python-poetry.org | python3 - && \
-		export PATH=$$HOME/.local/bin:$$PATH && \
-		poetry lock"
+env:
+ifeq ($(OS),Windows_NT)
+	@if not exist .env ( \
+		echo OPENAI_API_KEY=""  # Insert your OpenAI API key here before starting > .env && \
+		echo .env file created \
+	)
+else
+	@if [ ! -f .env ]; then \
+		echo 'OPENAI_API_KEY=""  # Insert your OpenAI API key here before starting' > .env; \
+		echo ".env file created"; \
+	fi
+endif
 
 build:
 	docker-compose build

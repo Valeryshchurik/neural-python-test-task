@@ -2,8 +2,8 @@ from langgraph.constants import START, END
 from langgraph.graph import StateGraph
 from pydantic import BaseModel, Field
 
-from src.parsers import license_info_parser, function_extractor_parser, function_counter_parser, rust_translator_parser
-from src.prompts import (
+from parsers import license_info_parser, function_extractor_parser, function_counter_parser, rust_translator_parser
+from prompts import (
     copyright_license_template,
     function_extractor_template,
     function_counter_template,

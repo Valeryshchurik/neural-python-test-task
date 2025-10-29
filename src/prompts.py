@@ -1,6 +1,6 @@
 from langchain_core.prompts import PromptTemplate
 
-from src.parsers import license_info_parser, function_extractor_parser, function_counter_parser, rust_translator_parser
+from parsers import license_info_parser, function_extractor_parser, function_counter_parser, rust_translator_parser
 
 copyright_license_template = PromptTemplate(
     input_variables=["file_data"],
@@ -48,7 +48,7 @@ rust_translator_template = PromptTemplate(
     Rewrite this code into Rust:
     {file_data}
     
-    Return the resulted code in a field of the strict Parseable JSON matching this schema:
+    Return the resulted code in a field of the strict parseable JSON matching this schema:
     {format_instructions}
     """,
     partial_variables={'format_instructions': rust_translator_parser.get_format_instructions()}

@@ -6,8 +6,11 @@ services:
     container_name: my_app_container
     volumes:
       - ./src:/src
+      - ./data:/data
     ports:
       - "8000:8000"
     command: ["python", "starter.py"]
     env_file:
       - .env
+    environment:
+      - BASE_PATH=/src/..

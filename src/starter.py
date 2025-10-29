@@ -1,16 +1,18 @@
 from langchain_openai import ChatOpenAI
 
-from src.file_processor import LlmPyFuncFileProcessor
+from settings import DATA_FOLDER, OPENAI_API_KEY
+from file_processor import LlmPyFuncFileProcessor
 
-MY_BASE_KEY = ''
 llm = ChatOpenAI(
     temperature=0,
     model_name="minimax/minimax-m2:free",
     openai_api_base="https://openrouter.ai/api/v1",
-    api_key=MY_BASE_KEY
+    api_key=OPENAI_API_KEY
 )
-base_path = '..'
 processor = LlmPyFuncFileProcessor(llm)
-result = processor.process_file(f"{base_path}/data/3.py")
-print('The result of processing')
-print(result)
+
+results = [processor.process_file(f) for f in DATA_FOLDER.glob('*.py')]
+succeeded_files_count = sum(results)
+failed_files_count = len(results) - succeeded_files_count
+
+print(f'Files parsed. Successful: {succeeded_files_count}. Failed: {failed_files_count}')
