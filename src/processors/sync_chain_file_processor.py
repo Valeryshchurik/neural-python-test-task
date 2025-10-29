@@ -5,13 +5,14 @@ from langchain_core.runnables.branch import RunnableBranch
 from pydantic import BaseModel
 
 from processors.base_llm_file_processor import BaseLlmFileProcessor
-from settings import OUTPUT_FOLDER, RUST_FOLDER
 from parsers import RustCodeLlmOutput
 
-from utils import get_unique_filepath, prepare_traceback_text
+from utils import prepare_traceback_text
 
 
 class SyncChainFileProcessor(BaseLlmFileProcessor):
+    version = 'llm_sync_chain_alpha'
+
     def __init__(self, llm):
         super().__init__(llm)
         self.file_data = None
@@ -50,10 +51,10 @@ class SyncChainFileProcessor(BaseLlmFileProcessor):
             result = self.entry_point.invoke({})
 
             if isinstance(result, RustCodeLlmOutput):
-                rust_output_file = get_unique_filepath(RUST_FOLDER / f"{input_path.stem}.rs")
+                rust_output_file = self._get_rust_code_path(input_path.stem)
                 rust_output_file.write_text(result.code, encoding="utf-8")
             else:
-                output_file = get_unique_filepath(OUTPUT_FOLDER / f"{input_path.stem}.txt")
+                output_file = self._get_output_path(input_path.stem)
                 json_str = result.model_dump_json(indent=4)
                 output_file.write_text(json_str, encoding="utf-8")
 

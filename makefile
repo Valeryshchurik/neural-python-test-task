@@ -14,8 +14,11 @@ endif
 build:
 	docker-compose build
 
-start:
-	docker-compose up -d
+start_sync_mode:
+	docker-compose up sync_processor
+
+start_async_mode:
+	docker-compose up async_processor
 
 stop:
 	docker-compose down

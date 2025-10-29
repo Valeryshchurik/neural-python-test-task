@@ -15,6 +15,8 @@ from utils import get_unique_filepath
 
 
 class BaseLlmFileProcessor:
+    version = 'abstract'
+
     def __init__(self, llm):
         OUTPUT_FOLDER.mkdir(parents=True, exist_ok=True)
         RUST_FOLDER.mkdir(parents=True, exist_ok=True)
@@ -27,10 +29,10 @@ class BaseLlmFileProcessor:
         self.rust_translator_chain = rust_translator_template | self.llm | rust_translator_parser
 
     def _get_output_path(self, filename):
-        return get_unique_filepath(OUTPUT_FOLDER / f"{filename}.json")
+        return get_unique_filepath(OUTPUT_FOLDER / f"{filename}_by_{self.version}.json")
 
     def _get_rust_code_path(self, filename):
-        return get_unique_filepath(RUST_FOLDER / f"{filename}.rs")
+        return get_unique_filepath(RUST_FOLDER / f"{filename}_by_{self.version}.rs")
 
     def _get_error_log_path(self, filename):
-        return get_unique_filepath(ERROR_LOG_FOLDER / f"{filename}.txt")
+        return get_unique_filepath(ERROR_LOG_FOLDER / f"{filename}_by_{self.version}.txt")

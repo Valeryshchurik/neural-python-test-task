@@ -210,5 +210,4 @@ __marimo__/
 .idea/
 
 # Generated data
-data/output/
-data/rust/
+result/

@@ -41,8 +41,9 @@ class AsyncGraphFileProcessor(BaseLlmFileProcessor):
         def extract_license(state: FileProcessingState) -> FileProcessingState:
             result = self.copyright_license_chain.invoke({"file_data": state.file_data})
             state.copyright_info = result.dict()
+            errors = state.copyright_info.pop('errors')
             state.is_license_open_source = result.is_license_open_source
-            state.errors.extend(result.errors)
+            state.errors.extend(errors)
             return state
 
         def count_functions(state: FileProcessingState) -> FileProcessingState:

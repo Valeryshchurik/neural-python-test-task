@@ -1,16 +1,27 @@
 version: '3.8'
 
+x-common-settings: &common-settings
+  build: .
+  volumes:
+    - ./src:/src
+    - ./data:/data
+  env_file:
+    - .env
+  environment:
+    - BASE_PATH=/src/..
+    - PYTHONUNBUFFERED=1
+
 services:
-  app:
-    build: .
-    container_name: my_app_container
-    volumes:
-      - ./src:/src
-      - ./data:/data
+  sync_processor:
+    <<: *common-settings
     ports:
       - "8000:8000"
-    command: ["python", "starter.py"]
-    env_file:
-      - .env
-    environment:
-      - BASE_PATH=/src/..
+    command: ["python", "-m", "starters.sync_starter"]
+    container_name: sync_processor_container
+
+  async_processor:
+    <<: *common-settings
+    ports:
+      - "8001:8001"
+    command: ["python", "-m", "starters.async_starter"]
+    container_name: async_processor_container

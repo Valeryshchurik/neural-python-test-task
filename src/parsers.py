@@ -10,12 +10,12 @@ class BaseInputContext(BaseModel):
 
 class BaseOutputContext(BaseModel):
     errors: list[str] = Field(
-        description="Add an error if you can not complete the instructions accurately due to incorrect file data",
+        description="Add here some comments if you struggle to solve the origin task",
         default=[]
     )
 
 
-class LicenseInfoLlmOutput(BaseModel):
+class LicenseInfoLlmOutput(BaseOutputContext):
     copyright_holder: str = Field(description="Field for the copyright holder")
     license_name: str = Field(description="Field for the license name")
     is_license_open_source: bool = Field(description="Answer if the license is open source or not (only True or False)")

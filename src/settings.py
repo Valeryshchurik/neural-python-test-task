@@ -4,9 +4,6 @@ from pathlib import Path
 
 load_dotenv()
 
-__all__ = ['OPENAI_API_KEY', 'DATA_FOLDER', 'ERROR_LOG_FOLDER', 'OUTPUT_FOLDER', 'RUST_FOLDER']
-
-
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 if OPENAI_API_KEY is None:
     raise EnvironmentError('Environment variable OPENAI_API_KEY is required!')
