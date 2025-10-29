@@ -8,6 +8,6 @@ services:
       - ./src:/src
     ports:
       - "8000:8000"
-    command: ["python", "main.py"]
+    command: ["python", "starter.py"]
     env_file:
       - .env
