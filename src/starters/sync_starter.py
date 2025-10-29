@@ -16,7 +16,7 @@ def main():
     processor = SyncChainFileProcessor(llm)
     results = [processor.process_file(f) for f in DATA_FOLDER.glob('*.py')]
 
-    print_process_finished_message(results)
+    print_process_finished_message(processor, results)
 
 
 if __name__ == "__main__":

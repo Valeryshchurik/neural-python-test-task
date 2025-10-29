@@ -19,7 +19,7 @@ async def main():
     tasks = [processor.process_file(f) for f in DATA_FOLDER.glob('*.py')]
     results = await asyncio.gather(*tasks)
 
-    print_process_finished_message(results)
+    print_process_finished_message(processor, results)
 
 if __name__ == "__main__":
     asyncio.run(main())

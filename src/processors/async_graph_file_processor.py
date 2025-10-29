@@ -31,6 +31,8 @@ class FileProcessingState(BaseModel):
 
 
 class AsyncGraphFileProcessor(BaseLlmFileProcessor):
+    version = 'llm_async_graph_proc_2'
+
     def __init__(self, llm):
         super().__init__(llm)
         self.graph = self._build_graph()

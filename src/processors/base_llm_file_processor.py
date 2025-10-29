@@ -18,9 +18,13 @@ class BaseLlmFileProcessor:
     version = 'abstract'
 
     def __init__(self, llm):
-        OUTPUT_FOLDER.mkdir(parents=True, exist_ok=True)
-        RUST_FOLDER.mkdir(parents=True, exist_ok=True)
-        ERROR_LOG_FOLDER.mkdir(parents=True, exist_ok=True)
+        self.output_folder = OUTPUT_FOLDER / self.version
+        self.rust_folder = RUST_FOLDER / self.version
+        self.error_log_folder = ERROR_LOG_FOLDER / self.version
+
+        self.output_folder.mkdir(parents=True, exist_ok=True)
+        self.rust_folder.mkdir(parents=True, exist_ok=True)
+        self.error_log_folder.mkdir(parents=True, exist_ok=True)
 
         self.llm = llm
         self.copyright_license_chain = copyright_license_template | self.llm | license_info_parser
@@ -29,10 +33,10 @@ class BaseLlmFileProcessor:
         self.rust_translator_chain = rust_translator_template | self.llm | rust_translator_parser
 
     def _get_output_path(self, filename):
-        return get_unique_filepath(OUTPUT_FOLDER / f"{filename}_by_{self.version}.json")
+        return get_unique_filepath(self.output_folder / f"{filename}.json")
 
     def _get_rust_code_path(self, filename):
-        return get_unique_filepath(RUST_FOLDER / f"{filename}_by_{self.version}.rs")
+        return get_unique_filepath(self.rust_folder / f"{filename}.rs")
 
     def _get_error_log_path(self, filename):
-        return get_unique_filepath(ERROR_LOG_FOLDER / f"{filename}_by_{self.version}.txt")
+        return get_unique_filepath(self.error_log_folder / f"{filename}.txt")

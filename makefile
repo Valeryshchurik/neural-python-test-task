@@ -11,8 +11,18 @@ else
 	fi
 endif
 
+clean:
+ifeq ($(OS),Windows_NT)
+	@cmd /c "if exist result rmdir /s /q result"
+else
+	@rm -rf result
+endif
+
 build:
 	docker-compose build
+
+test:
+	docker-compose run --rm sync_processor python -m pytest
 
 start_sync_mode:
 	docker-compose up sync_processor
