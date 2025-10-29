@@ -1,8 +1,9 @@
 FROM python:3.12
 
-RUN curl -sSL https://install.python-poetry.org | python3 - \
-    && export PATH="$HOME/.local/bin:$PATH" \
-    && poetry config virtualenvs.create false
+RUN curl -sSL https://install.python-poetry.org | python3 - && \
+    $HOME/.local/bin/poetry config virtualenvs.create false
+
+ENV PATH="$HOME/.local/bin:$PATH"
 
 WORKDIR /src
 
