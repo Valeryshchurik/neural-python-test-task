@@ -4,7 +4,7 @@ from pathlib import Path
 
 load_dotenv()
 
-__all__ = ['OPENAI_API_KEY', 'DATA_FOLDER', 'OUTPUT_FOLDER', 'RUST_FOLDER']
+__all__ = ['OPENAI_API_KEY', 'DATA_FOLDER', 'ERROR_LOG_FOLDER', 'OUTPUT_FOLDER', 'RUST_FOLDER']
 
 
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
@@ -15,5 +15,9 @@ RESOLVED_BASE_PATH = Path(os.getenv('BASE_PATH', Path(__file__).parent.parent.re
 print(RESOLVED_BASE_PATH)
 
 DATA_FOLDER = RESOLVED_BASE_PATH / 'data'
-OUTPUT_FOLDER = DATA_FOLDER / 'output'
-RUST_FOLDER = DATA_FOLDER / 'rust'
+RESULT_FOLDER = RESOLVED_BASE_PATH / 'result'
+
+ERROR_LOG_FOLDER = RESULT_FOLDER / 'error'
+OUTPUT_FOLDER = RESULT_FOLDER / 'output'
+RUST_FOLDER = RESULT_FOLDER / 'rust'
+

@@ -15,7 +15,7 @@ class BaseOutputContext(BaseModel):
     )
 
 
-class LicenseInfoLlmOutput(BaseOutputContext):
+class LicenseInfoLlmOutput(BaseModel):
     copyright_holder: str = Field(description="Field for the copyright holder")
     license_name: str = Field(description="Field for the license name")
     is_license_open_source: bool = Field(description="Answer if the license is open source or not (only True or False)")
