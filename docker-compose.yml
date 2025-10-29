@@ -5,6 +5,7 @@ x-common-settings: &common-settings
   volumes:
     - ./src:/src
     - ./data:/data
+    - ./result:/result
   env_file:
     - .env
   environment:
