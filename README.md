@@ -1,7 +1,7 @@
 Repository contains prepared processors for llm file parsing service using LangChain. Two processors represented here:
 
-a) Synchronous processor that uses a basic method for linking chain elements
-b) Asynchronous processor that is based on using langgraph.
+* Synchronous processor that uses a basic method for linking chain elements;
+* Asynchronous processor that is based on using langgraph.
 
 Processors take data from /data folder and save the processing result to /result folder
 
