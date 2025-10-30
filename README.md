@@ -1,4 +1,8 @@
-Repository contains some initial setups for llm file parsing service using LangChain.
+Repository contains prepared processors for llm file parsing service using LangChain. Two processors represented here:
+
+a) Synchronous processor that uses a basic method for linking chain elements
+b) Asynchronous processor that is based on using langgraph.
+
 Processors take data from /data folder and save the processing result to /result folder
 
 ### Setup steps:
@@ -10,8 +14,8 @@ Processors take data from /data folder and save the processing result to /result
 3. ```make build```
 
 #### start llm_processing
-4. a) ```make start_sync_mode```
-   b) ```make start_async_mode```
+4. a) ```make start_sync_mode``` for SyncChainFileProcessor
+   b) ```make start_async_mode``` for AsyncGraphFileProcessor
 
 #### to run tests use ```make test```
 #### to clean the output dir you can use ```make clean```
